@@ -1,5 +1,3 @@
-# Ignore venv
-work_env
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -122,6 +120,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+#work_env
 
 # Spyder project settings
 .spyderproject
