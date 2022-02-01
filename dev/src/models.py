@@ -14,4 +14,8 @@ class Exercise(db.Model):
     self.type_of_exercise = type_of_exercise
 
   def __repr__(self):
-    return f'Exercise {self.name} that burns {self.kcals_per_rep}/rep and is of type {self.type_of_exercise}'
+    if self.type_of_exercise == 'repeatable':
+      return f'Exercise {self.name} that burns {self.kcals_per_rep}kcals/repeat and is of type {self.type_of_exercise}'
+
+    else:
+      return f'Exercise {self.name} that burns {self.kcals_per_rep}kcals/minute and is of type {self.type_of_exercise}'

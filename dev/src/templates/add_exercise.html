@@ -3,5 +3,14 @@
 {% block content %}
 <div>
   <h1>Add exercise</h1>
+  <form method="POST">
+    {{form.hidden_tag()}}
+    {{form.name.label}}{{form.name}}<br>
+    {{form.kcals_per_rep.label}}{{form.kcals_per_rep}}<br>
+    {% for choice in form.type_of_exercise %}
+        {{ choice.label }}{{choice}}
+    {% endfor %}<br>
+    {{form.submit()}}
+  </form>
 </div>
 {% endblock %}

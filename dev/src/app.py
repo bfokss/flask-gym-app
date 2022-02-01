@@ -1,7 +1,8 @@
 import os
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, redirect
 from flask_migrate import Migrate
 from models import db, Exercise
+from forms import AddExerciseForm
 
 app = Flask(__name__)
 
@@ -32,9 +33,28 @@ def show_trainings():
 def add_training():
     return render_template('add_training.html')
 
-@app.route('/add_exercise')
+@app.route('/show_exercises')
+def show_exercises():
+    exercises = Exercise.query.all()
+
+    return render_template('show_exercises.html', exercises=exercises)
+
+@app.route('/add_exercise', methods=['GET', 'POST'])
 def add_exercise():
-    return render_template('add_exercise.html')
+    form = AddExerciseForm()
+
+    if form.validate_on_submit():
+        name = form.name.data
+        kcals_per_rep = form.kcals_per_rep.data
+        type_of_exercise = form.type_of_exercise.data
+
+        new_exercise = Exercise(name, kcals_per_rep, type_of_exercise)
+        db.session.add(new_exercise)
+        db.session.commit()
+
+        return redirect(url_for('show_exercises'))
+
+    return render_template('add_exercise.html', form=form)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

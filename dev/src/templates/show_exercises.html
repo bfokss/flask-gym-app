@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div>
+  <h1>Show exercises</h1>
+  
+  {% for exercise in exercises %}
+      <ul>
+        <li>{{ exercise }}</li>
+      </ul>
+  {% endfor %}
+  
+</div>
+{% endblock %}
