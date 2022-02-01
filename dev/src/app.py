@@ -1,6 +1,20 @@
+import os
 from flask import Flask, render_template, url_for
+from flask_migrate import Migrate
+from models import db, Exercise
 
 app = Flask(__name__)
+
+app.config['SECRET_KEY'] = 'mysecretkey'
+
+### DATABASE SECTION
+basedir = os.path.abspath(os.path.dirname(__file__))
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db.init_app(app)
+migrate = Migrate(app, db)
+####
 
 @app.route('/')
 def index():
