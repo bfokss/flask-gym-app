@@ -5,21 +5,37 @@
 <font size="+1"><b>Dev mode:</b></font>
 
 While in the main (flask-gym-app) folder, do the following:
-1. Go to the directory with your virtual environment (venv)
+1. Activate your venv
 ```
-cd work_env
+.\work_env\Scripts\activate.bat
 ```
-2. Activate your venv
+2. Make sure that your venv has all the required packages installed - run only if you're not sure whether your venv has all the required packages
 ```
-Scripts\activate.bat
-```
-3. OPTIONALLY - make sure that your venv has all the required packages installed
-```
-pip install -r requirements.txt
+pip install -r .\work_env\requirements.txt
 ``` 
-4. Run the app
+3. Go to the source folder
 ```
-python ..\dev\src\app.py
+cd dev\src
+```
+4. Set environmental variable (on Linux change `set` to `export`) - run only if you're not sure whether this variable is already set
+```
+set FLASK_APP=app.py
+```
+5. Initialize the database - before you run it make sure that your folder doesn't contain the `data.sqlite` file and `migrations` directory
+```
+flask db init
+```
+6. Migrate the database
+```
+flask db migrate -m "Initial migration"
+```
+7. Upgrade the database
+```
+flask db upgrade
+```
+8. Run the app
+```
+python app.py
 ```
 The app should be running in developer mode, which results in it refreshing every time you make any change(s) in the code :)
 <hr>
