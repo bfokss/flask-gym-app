@@ -1,6 +1,14 @@
 from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
+trainings_exercises = db.Table('trainings_exercises',
+  db.Column('training_id', db.Integer, db.ForeignKey('trainings.training_id'), primary_key=True),
+  db.Column('exercise_id', db.Integer, db.ForeignKey('exercises.exercise_id'), primary_key=True),
+  db.Column('repeats', db.Integer),
+  db.Column('weight', db.Float),
+  db.Column('time', db.Float)
+)
+
 class Exercise(db.Model):
   __tablename__ = 'exercises'
   exercise_id = db.Column(db.Integer, primary_key=True)
@@ -25,6 +33,7 @@ class Training(db.Model):
   __tablename__ = 'trainings'
   training_id = db.Column(db.Integer, primary_key=True)
   training_date = db.Column(db.Date, nullable=False)
+  exercises = db.relationship('Exercise', secondary=trainings_exercises, lazy='subquery', backref=db.backref('trainings', lazy=True))
 
   def __init__(self, training_date):
     self.training_date = training_date

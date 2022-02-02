@@ -4,6 +4,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, RadioField, SubmitField
 from wtforms.fields.html5 import DateField
 
+
 class AddExerciseForm(FlaskForm):
   name = StringField('Name of the exercise: ')
   kcals_per_rep = IntegerField('Kcals per repeat/minute: ')
