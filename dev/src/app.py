@@ -1,8 +1,8 @@
 import os
 from flask import Flask, render_template, url_for, redirect
 from flask_migrate import Migrate
-from models import db, Exercise
-from forms import AddExerciseForm
+from models import db, Exercise, Training
+from forms import AddExerciseForm, AddTrainingForm
 
 app = Flask(__name__)
 
@@ -27,11 +27,27 @@ def about():
 
 @app.route('/show_trainings')
 def show_trainings():
-    return render_template('show_trainings.html')
+    trainings = Training.query.all()
 
-@app.route('/add_training')
+    return render_template('show_trainings.html', trainings=trainings)
+
+@app.route('/add_training', methods=['GET', 'POST'])
 def add_training():
-    return render_template('add_training.html')
+    form = AddTrainingForm()
+
+    if form.validate_on_submit():
+        training_date = form.training_date.data
+        print(training_date)
+
+        new_training = Training(training_date)
+        db.session.add(new_training)
+        db.session.commit()
+
+        return redirect(url_for('show_trainings'))
+    else:
+        print('Wrong date format')
+        
+    return render_template('add_training.html', form=form)
 
 @app.route('/show_exercises')
 def show_exercises():

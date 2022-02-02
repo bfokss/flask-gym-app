@@ -19,3 +19,15 @@ class Exercise(db.Model):
 
     else:
       return f'Exercise {self.name} that burns {self.kcals_per_rep}kcals/minute and is of type {self.type_of_exercise}'
+
+
+class Training(db.Model):
+  __tablename__ = 'trainings'
+  training_id = db.Column(db.Integer, primary_key=True)
+  training_date = db.Column(db.Date, nullable=False)
+
+  def __init__(self, training_date):
+    self.training_date = training_date
+
+  def __repr__(self):
+    return f'Training with ID={self.training_id} made on {self.training_date}'

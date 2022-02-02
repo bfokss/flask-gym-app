@@ -3,12 +3,11 @@
 {% block content %}
 <div>
   <h1>Show exercises</h1>
-  
-  {% for exercise in exercises %}
-      <ul>
-        <li>{{ exercise }}</li>
-      </ul>
-  {% endfor %}
+  <ul>
+    {% for exercise in exercises %}
+    <li>{{ exercise }}</li>
+    {% endfor %}
+  </ul>
   
 </div>
 {% endblock %}
