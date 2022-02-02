@@ -1,8 +1,12 @@
 import os
+import this
+from unittest import result
 from flask import Flask, render_template, url_for, redirect
 from flask_migrate import Migrate
-from models import db, Exercise, Training
-from forms import AddExerciseForm, AddTrainingForm
+import sqlalchemy
+from models import db, Exercise, Training, trainings_exercises
+from forms import AddExerciseForm, AddTrainingForm, UpdateTrainingForm
+from wtforms import SelectFieldBase
 
 app = Flask(__name__)
 
@@ -37,17 +41,43 @@ def add_training():
 
     if form.validate_on_submit():
         training_date = form.training_date.data
-        print(training_date)
 
         new_training = Training(training_date)
         db.session.add(new_training)
         db.session.commit()
 
         return redirect(url_for('show_trainings'))
-    else:
-        print('Wrong date format')
-        
+
     return render_template('add_training.html', form=form)
+
+@app.route('/training/<id>', methods=['GET', 'POST'])
+def show_training(id):
+    def get_available_exercises():
+
+        available_exercises = Exercise.query.all()
+        return_list = []
+        
+        for exercise in available_exercises:
+            return_list.append((exercise.exercise_id, exercise.name))
+
+        return return_list
+    
+    this_training = Training.query.get(id)
+    result_joined = db.session.query(Training, Exercise, trainings_exercises).join(Training.exercises).join(trainings_exercises).filter(Training.training_id == id)
+
+    result_joined_clean = []
+    for row in result_joined:
+        new_row = []
+        new_row.append(row[1])
+        new_row += row[4:]
+        result_joined_clean.append(new_row)
+
+    form = UpdateTrainingForm()
+    
+    available_choices = get_available_exercises()
+    form.exercises.choices = available_choices
+
+    return render_template('training.html', id=id, form=form, this_training=this_training, result_joined_clean=result_joined_clean)
 
 @app.route('/show_exercises')
 def show_exercises():

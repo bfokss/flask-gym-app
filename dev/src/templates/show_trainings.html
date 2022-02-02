@@ -5,7 +5,7 @@
   <h1>Show trainings</h1>
   <ul>
     {% for training in trainings %}
-    <li>{{ training }}</li>
+    <a href="{{url_for('show_training', id=training.training_id)}}"><li>{{ training }}</li></a>
     {% endfor %}
   </ul>
 </div>

@@ -1,8 +1,10 @@
 from random import choices
+from tkinter.tix import Select
 from tokenize import String
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, RadioField, SubmitField
+from wtforms import StringField, IntegerField, RadioField, SubmitField, SelectField, FloatField
 from wtforms.fields.html5 import DateField
+from models import Exercise
 
 
 class AddExerciseForm(FlaskForm):
@@ -14,3 +16,10 @@ class AddExerciseForm(FlaskForm):
 class AddTrainingForm(FlaskForm):
   training_date = DateField('Date of training: ', format='%Y-%m-%d')
   submit = SubmitField('Add training')
+
+class UpdateTrainingForm(FlaskForm):
+  exercises = SelectField("Exercise: ")
+  repeats = IntegerField('Repeats: ')
+  weight = FloatField('Weight: ')
+  time = FloatField('Time: ')
+  submit = SubmitField('Add exercise')

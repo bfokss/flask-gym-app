@@ -15,6 +15,10 @@ class Exercise(db.Model):
   name = db.Column(db.Text)
   kcals_per_rep = db.Column(db.Integer)
   type_of_exercise = db.Column(db.Text)
+  trainings = db.relationship(
+    'Training', 
+    secondary=trainings_exercises,
+    backref='trainings_exercises')
 
   def __init__(self, name, kcals_per_rep, type_of_exercise):
     self.name = name
@@ -33,7 +37,10 @@ class Training(db.Model):
   __tablename__ = 'trainings'
   training_id = db.Column(db.Integer, primary_key=True)
   training_date = db.Column(db.Date, nullable=False)
-  exercises = db.relationship('Exercise', secondary=trainings_exercises, lazy='subquery', backref=db.backref('trainings', lazy=True))
+  exercises = db.relationship(
+    'Exercise', 
+    secondary=trainings_exercises,
+    backref='exercies_trainings')
 
   def __init__(self, training_date):
     self.training_date = training_date

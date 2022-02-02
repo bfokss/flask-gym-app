@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div>
+  <h1>Page for training no. {{id}}</h1>
+  <h2>Training data:</h2>
+  <p>Date: {{this_training.training_date}}</p>
+  
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Exercise</th>
+        <th scope="col">Repeats</th>
+        <th scope="col">Weight</th>
+        <th scope="col">Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr scope="row">{% for row in result_joined_clean %}
+        {% for column in row %}
+            <td>{% if column %}
+                  {{ column }}
+                {% else %}
+                  -
+                {% endif %}
+            </td>
+        {% endfor %}
+      </tr>
+    </tbody>
+  {% endfor %}
+  </table>
+  
+  
+  <hr>
+  <h2>Add new exercise to this training:</h2>
+  <form method="POST">
+    {{form.hidden_tag()}}
+    {{form.exercises}}<br>
+    {{form.repeats.label}}{{form.repeats}}<br>
+    {{form.weight.label}}{{form.weight}}<br>
+    {{form.time.label}}{{form.time}}<br>
+    {{form.submit()}}
+  </form>
+</div>
+{% endblock %}
