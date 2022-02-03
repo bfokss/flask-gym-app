@@ -3,11 +3,24 @@
 {% block content %}
 <div>
   <h1>Show exercises</h1>
-  <ul>
-    {% for exercise in exercises %}
-    <li>{{ exercise }}</li>
-    {% endfor %}
-  </ul>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Kcals per repeat/minute</th>
+        <th scope="col">Type</th>
+      </tr>
+    </th>
+    <tbody>
+      {% for exercise in exercises %}
+      <tr scope="row">
+        <td>{{ exercise.name }}</td>
+        <td>{{ exercise.kcals_per_rep }}</td>
+        <td>{{ exercise.type_of_exercise }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
   
 </div>
 {% endblock %}
