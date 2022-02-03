@@ -13,21 +13,40 @@
         <th scope="col">Repeats</th>
         <th scope="col">Weight</th>
         <th scope="col">Time</th>
+        <th scope="col">Total kcals</th>
       </tr>
     </thead>
     <tbody>
-      <tr scope="row">{% for row in result_joined_clean %}
-        {% for column in row %}
-            <td>{% if column %}
-                  {{ column }}
-                {% else %}
-                  -
-                {% endif %}
-            </td>
-        {% endfor %}
+      {% for row in result_joined_clean %}
+      <tr scope="row">
+        <td>{{ row['exercise_name'] }}</td>
+        <td>
+          {% if row['repeats'] %}
+            {{ row['repeats'] }}
+          {% endif %}
+        </td>
+        <td>
+          {% if row['weight'] %}
+            {{ row['weight'] }}
+          {% endif %}
+          
+        </td>
+        <td>
+          {% if row['time'] %}
+              {{ row['time'] }}
+          {% endif %}
+        </td>
+        <td>{{ row['total_kcals'] }}</td>
+      </tr>
+      {% endfor %}
+      <tr>
+        <td style="font-weight: bold">Kcals total</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td style="font-weight: bold">{{ kcals_total }}</td>
       </tr>
     </tbody>
-  {% endfor %}
   </table>
   
   

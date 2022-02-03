@@ -65,19 +65,28 @@ def show_training(id):
     this_training = Training.query.get(id)
     result_joined = db.session.query(Training, Exercise, trainings_exercises).join(Training.exercises).join(trainings_exercises).filter(Training.training_id == id)
 
+    kcals_total = 0
     result_joined_clean = []
     for row in result_joined:
-        new_row = []
-        new_row.append(row[1])
-        new_row += row[4:]
+        new_row = {}
+        new_row['exercise_name'] = row[1].name
+        new_row['exercise_kcals_per_rep'] = row[1].kcals_per_rep
+        new_row['repeats'] = row[4]
+        new_row['weight'] = row[5]
+        new_row['time'] = row[6]
+        new_row['total_kcals'] = (new_row['exercise_kcals_per_rep'] * (new_row['repeats'] or '')) or (new_row['exercise_kcals_per_rep'] * (new_row['time'] or ''))
+        kcals_total += new_row['total_kcals']
         result_joined_clean.append(new_row)
+
+    for row in result_joined_clean:
+        print(row)
 
     form = UpdateTrainingForm()
     
     available_choices = get_available_exercises()
     form.exercises.choices = available_choices
 
-    return render_template('training.html', id=id, form=form, this_training=this_training, result_joined_clean=result_joined_clean)
+    return render_template('training.html', id=id, form=form, this_training=this_training, result_joined_clean=result_joined_clean, kcals_total=kcals_total)
 
 @app.route('/show_exercises')
 def show_exercises():
