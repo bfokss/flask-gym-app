@@ -63,28 +63,55 @@ def show_training(id):
         return return_list
     
     this_training = Training.query.get(id)
-    result_joined = db.session.query(Training, Exercise, trainings_exercises).join(Training.exercises).join(trainings_exercises).filter(Training.training_id == id)
+    query_text = sqlalchemy.sql.text(f"""
+        SELECT e.name, e.kcals_per_rep, te.repeats, te.weight, te.time
+        FROM trainings t
+            JOIN trainings_exercises te
+                ON t.training_id = te.training_id
+            JOIN exercises e
+                ON te.exercise_id = e.exercise_id 
+        WHERE t.training_id = {id}
+        ORDER BY e.name ASC""")
+
+    query_result = db.engine.execute(query_text)
+    query_list = [list(row) for row in query_result]
 
     kcals_total = 0
     result_joined_clean = []
-    for row in result_joined:
+    for row in query_list:
         new_row = {}
-        new_row['exercise_name'] = row[1].name
-        new_row['exercise_kcals_per_rep'] = row[1].kcals_per_rep
-        new_row['repeats'] = row[4]
-        new_row['weight'] = row[5]
-        new_row['time'] = row[6]
+        new_row['exercise_name'] = row[0]
+        new_row['exercise_kcals_per_rep'] = row[1]
+        new_row['repeats'] = row[2]
+        new_row['weight'] = row[3]
+        new_row['time'] = row[4]
         new_row['total_kcals'] = (new_row['exercise_kcals_per_rep'] * (new_row['repeats'] or '')) or (new_row['exercise_kcals_per_rep'] * (new_row['time'] or ''))
-        kcals_total += new_row['total_kcals']
-        result_joined_clean.append(new_row)
 
-    for row in result_joined_clean:
-        print(row)
+        try:
+            kcals_total += new_row['total_kcals']
+        except:
+            kcals_total += 0
+
+        result_joined_clean.append(new_row)
 
     form = UpdateTrainingForm()
     
     available_choices = get_available_exercises()
     form.exercises.choices = available_choices
+    
+    if form.validate_on_submit():
+        exercise_id = form.exercises.data
+        repeats = form.repeats.data
+        weight = form.weight.data
+        time = form.time.data
+
+        new_insert = trainings_exercises.insert().values(training_id=int(id), exercise_id=int(exercise_id), repeats=repeats, weight=weight, time=time)
+
+        db.engine.execute(new_insert)
+
+        print('insert successful!')
+
+        return redirect(url_for('show_training', id=id))
 
     return render_template('training.html', id=id, form=form, this_training=this_training, result_joined_clean=result_joined_clean, kcals_total=kcals_total)
 
