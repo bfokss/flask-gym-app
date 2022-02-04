@@ -4,9 +4,10 @@ from unittest import result
 from flask import Flask, render_template, url_for, redirect
 from flask_migrate import Migrate
 import sqlalchemy
+from forms import AddExerciseForm
 from models import db, Exercise, Training, trainings_exercises
-from forms import AddExerciseForm, AddTrainingForm, UpdateTrainingForm
 from wtforms import SelectFieldBase
+from forms import AddExerciseForm, AddTrainingForm, UpdateTrainingForm
 
 app = Flask(__name__)
 

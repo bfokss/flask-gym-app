@@ -1,6 +1,3 @@
-from random import choices
-from tkinter.tix import Select
-from tokenize import String
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, RadioField, SubmitField, SelectField, FloatField, validators
 from wtforms.fields.html5 import DateField
